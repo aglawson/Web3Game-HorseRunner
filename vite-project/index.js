@@ -167,7 +167,8 @@ window.addEventListener("load", function() {
         }
         update() {
             this.position.x -= this.speed;
-            if (this.position.x < 15- this.width) {
+            if (this.position.x < -1006) {
+                console.log(this.position.x, this.width);
                 this.position.x = 0;
             }
         }
