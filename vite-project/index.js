@@ -14,9 +14,14 @@ window.addEventListener("load", function() {
     let abiCoder;
     let paid = false;
     let num = 0;
-    let token_bal;
+    let token_bal = -1;
+
+    if(token_bal == -1) {
+        getHRUNBalance();
+    }
 
     let link = etherscan;    
+
 
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
@@ -25,7 +30,7 @@ window.addEventListener("load", function() {
     let generated = false;
     let paused = false;
     let vomhBal = parseInt(localStorage.getItem('VOMH'));
-    vomhBal == null ? vomhBal = 0 : vomhBal = vomhBal; 
+    vomhBal = 0;
     let gameOn = false;
     let preGame = true;
     //let pauseTime = 0;
@@ -167,8 +172,7 @@ window.addEventListener("load", function() {
         }
         update() {
             this.position.x -= this.speed;
-            if (this.position.x < -1006) {
-                console.log(this.position.x, this.width);
+            if (this.position.x < 15- this.width) {
                 this.position.x = 0;
             }
         }
@@ -284,7 +288,7 @@ window.addEventListener("load", function() {
 
         background.image = document.getElementsByName('bg')[Math.floor(points / 200)];
         //console.log(document.getElementsByName('bg').length)
-       player.update();
+        player.update();
 
         
         generateObstacle(randomIntFromInterval(1100, 2000), randomIntFromInterval(275, 360), 10);
@@ -346,7 +350,7 @@ window.addEventListener("load", function() {
         }
         context.fillText(`Mint Test Tokens (no gas needed): M`, canvas.width * 1/50, canvas.height * 1/8);
         context.fillText(`Buy VOMH w Test Token (no gas needed): B`, canvas.width * 1/50, canvas.height * 1/6);
-        context.fillText(`HRUN Balance: ${token_bal == undefined ? 0 : token_bal}`, canvas.width * 3/4, canvas.height * 1/7);
+        context.fillText(`HRUN Balance: ${token_bal == -1 ? 0 : token_bal}`, canvas.width * 3/4, canvas.height * 1/7);
     }
     animate();
 
@@ -354,7 +358,7 @@ window.addEventListener("load", function() {
         await getSigner();
         const success = await signMessage();
         if(success) {
-            const bal = localStorage.getItem('VOMH');
+            //const bal = localStorage.getItem('VOMH');
             vomhBal += 1000
             localStorage.setItem('VOMH', vomhBal);
         } else {
@@ -446,6 +450,7 @@ window.addEventListener("load", function() {
           if(execute.data.success) {
             link = etherscan + execute.data.message 
             console.log(link);
+            await getHRUNBalance();
             return true;
           } else {
             alert('Tx failed with error: ' + execute.data.message);
@@ -478,7 +483,6 @@ window.addEventListener("load", function() {
         let bal = await token_contract.balanceOf(userAddress);
         token_bal = parseInt(bal) / 10**18;
     }
-    getHRUNBalance();
 
     async function mintTokens() {
         await getSigner();
