@@ -284,7 +284,7 @@ window.addEventListener("load", function() {
 
         background.image = document.getElementsByName('bg')[Math.floor(points / 200)];
         //console.log(document.getElementsByName('bg').length)
-        player.update();
+       player.update();
 
         
         generateObstacle(randomIntFromInterval(1100, 2000), randomIntFromInterval(275, 360), 10);
