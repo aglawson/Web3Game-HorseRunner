@@ -15,6 +15,25 @@ window.addEventListener("load", function() {
     let paid = false;
     let num = 0;
     let token_bal = -1;
+    let mySound;
+
+    mySound = new sound("./assets/medieval.wav");
+
+    function sound(src) {
+        this.sound = document.createElement("audio");
+        this.sound.src = src;
+        this.sound.setAttribute("preload", "auto");
+        this.sound.setAttribute("controls", "none");
+        this.sound.style.display = "none";
+        document.body.appendChild(this.sound);
+        this.play = function(){
+          this.sound.play();
+        }
+        this.stop = function(){
+          this.sound.pause();
+        }
+      }
+
 
     if(token_bal == -1) {
         getHRUNBalance();
@@ -274,8 +293,10 @@ window.addEventListener("load", function() {
         context.fillStyle = 'white';
         context.fillRect(0, 0, canvas.width, canvas.height);
         requestAnimationFrame(animate);
-
+        // /public/assets/medieval.wav
         //console.log(player.position.y + player.height + player.velocity.y, canvas.height)
+
+        mySound.play();
 
         background.draw();
         // props.draw();
