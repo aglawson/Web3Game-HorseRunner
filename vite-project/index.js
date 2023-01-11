@@ -17,8 +17,6 @@ window.addEventListener("load", function() {
     let token_bal = -1;
     let mySound;
 
-    mySound = new sound("./assets/medieval.wav");
-
     function sound(src) {
         this.sound = document.createElement("audio");
         this.sound.src = src;
@@ -52,6 +50,7 @@ window.addEventListener("load", function() {
     vomhBal = 0;
     let gameOn = false;
     let preGame = true;
+    let play = true;
     //let pauseTime = 0;
     let points = 0;
     let count = 0;
@@ -289,14 +288,15 @@ window.addEventListener("load", function() {
         return Math.floor(Math.random() * (max - min + 1) + min)
     }
 
+    mySound = new sound("./assets/medieval.wav");
+
     function animate() {
         context.fillStyle = 'white';
         context.fillRect(0, 0, canvas.width, canvas.height);
         requestAnimationFrame(animate);
+
         // /public/assets/medieval.wav
         //console.log(player.position.y + player.height + player.velocity.y, canvas.height)
-
-        mySound.play();
 
         background.draw();
         // props.draw();
@@ -358,12 +358,17 @@ window.addEventListener("load", function() {
             background.update();
             //props.update();
             //platform.update();
+            if(play) {
+                mySound.play();
+            }
             obs.update();
         }
         context.fillText(`Jump: Space/Up Arrow`, canvas.width * 1/50, canvas.height * 1/25);
         context.fillText(`Pause: Esc`, canvas.width * 1/50, canvas.height * 1/12);
         context.fillText(`VOMH Balance: ${localStorage.getItem('VOMH') == null ? 0 : localStorage.getItem('VOMH')}`, canvas.width * 3/4, 50);
         context.fillText(`Score: ${points} High Score: ${localStorage.getItem('highscore') == null ? 0 : localStorage.getItem('highscore')}`, canvas.width * 3/4, 20);
+        // context.fillText(`Toggle Music: Q`, canvas.width * 1/50, 120);
+
         context.font = "18px sans-serif";
         if(collision(player, obs)) {
             player.currentSprite = player.sprites.hurt.right;
@@ -519,8 +524,9 @@ window.addEventListener("load", function() {
         }
     }
 
+
     addEventListener('keydown', ({code}) => {
-        //console.log(code);
+        console.log(code);
         switch(code) {
             case 'Space':
                 if(!gameOn && preGame) {
@@ -580,6 +586,11 @@ window.addEventListener("load", function() {
                     console.log('minting...');
                     mintTokens();
                 }
+                break;
+
+            case 'KeyQ':
+                play = false;
+                //sound.stop();
                 break;
         }
     })
