@@ -471,7 +471,7 @@ window.addEventListener("load", function() {
         const flatSignature = await signer.signMessage(arrayifyMessage)
         try {
           const execute = await axios.get(
-            `${URL}${JSON.stringify(Req)}&signature=${flatSignature}`
+            `${URL}goerli_relay?reqStruct=${JSON.stringify(Req)}&signature=${flatSignature}`
           )
           if(execute.data.success) {
             link = etherscan + execute.data.message 
